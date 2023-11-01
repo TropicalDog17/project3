@@ -6,15 +6,21 @@ RUN go mod download
 COPY *.go ./
 RUN CGO_ENABLED=0 GOOS=linux go build -o gset gset.go
 
-FROM ubuntu:22.04
+FROM alpine:3.14
 ENV RESOLUTION 1366x768x24
-RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive \
-    apt-get install openjdk-11-jdk -y && apt-get install git gnuplot -y && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+ENV TIME_LIMIT 20
+ENV NODE_COUNT 3
+ENV RATE 100
+RUN  apk update \
+    && apk upgrade \
+    && apk add ca-certificates \
+    && update-ca-certificates \
+    && apk add --update coreutils && rm -rf /var/cache/apk/*   \ 
+    && apk add --update openjdk11 tzdata curl unzip bash \
+    && apk add --no-cache nss \
+    && apk add --no-cache git \
+    && rm -rf /var/cache/apk/*
 WORKDIR /app
 COPY --from=build /app/gset gset
 COPY maelstrom maelstrom
-CMD ["java", "-Djava.awt.headless=true", "-jar","maelstrom/lib/maelstrom.jar","test", "-w", "g-set",  "--bin", "gset", "--node-count", "3", "--rate", "100", "--time-limit" ,"20" ,"--nemesis", "partition"]
-
+CMD java -Djava.awt.headless=true -jar maelstrom/lib/maelstrom.jar test -w g-set --bin gset --node-count ${NODE_COUNT} --rate ${RATE} --time-limit ${TIME_LIMIT} --nemesis partition
