@@ -1,0 +1,31 @@
+project_name: pairpad
+
+builds:
+  - id: "pairpad-server"
+    main: ./server/main.go
+    binary: pairpad-server
+    goos:
+      - linux
+      - darwin
+      - windows
+      - openbsd
+    goarch:
+      - amd64
+      - arm64
+    mod_timestamp: '{{ .CommitTimestamp }}'
+    env:
+    - CGO_ENABLED=0
+  - id: "pairpad-client"
+    dir: ./client
+    binary: pairpad
+    goos:
+      - linux
+      - darwin
+      - windows
+      - openbsd
+    goarch:
+      - amd64
+      - arm64
+    mod_timestamp: '{{ .CommitTimestamp }}'
+    env:
+    - CGO_ENABLED=0
