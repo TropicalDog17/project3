@@ -28,13 +28,6 @@ type Message struct {
 // MessageType represents the type of the message.
 type MessageType string
 
-// Currently, pairpad supports 5 message types:
-// - docSync (for syncing documents)
-// - docReq (for requesting documents)
-// - SiteID (for generating site IDs)
-// - join (for joining messages)
-// - users (for the list of active users)
-
 const (
 	DocSyncMessage MessageType = "docSync"
 	DocReqMessage  MessageType = "docReq"
