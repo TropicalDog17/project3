@@ -221,12 +221,9 @@ func (doc *Document) LocalInsert(char Character, position int) (*Document, error
 	return doc, nil
 }
 
-// IntegrateInsert inserts the given Character into the Document
-// Characters based off of the previous & next Character
 func (doc *Document) IntegrateInsert(char, charPrev, charNext Character) (*Document, error) {
 	// Get the subsequence.
 
-	// panic happens when charPrev > charNext
 	subsequence, err := doc.Subseq(charPrev, charNext)
 	if err != nil {
 		return doc, err
